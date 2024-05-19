@@ -17,7 +17,12 @@
     document.getElementById('generate').addEventListener('click', event => {
       let url = document.getElementById('amazonurl').value;
       let dp = /dp\/([^?\/]+)/.exec(url);
-      if (dp.length < 2) return;
+      if ((dp == null) || (dp.length < 2)) {
+        let gp = /gp\/product\/([^?\/]+)/.exec(url);
+        console.log(gp);
+        if ((gp == null) || (gp.length < 2)) return;
+        dp = gp;
+      }
 
       let imageurl = 'https://images.amazon.com/images/P/' + dp[1] + '.09_SL500_.jpg';
       let ctx = document.getElementById('image').getContext('2d');

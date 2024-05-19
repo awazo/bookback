@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>bookback</title>
+</head>
+<body>
+  <div id="inputarea">
+    <input type="text" name="amazonurl" id="amazonurl" placeholder="amazon url here" />
+    <button type="button" id="generate">generate</button>
+    <button type="button" id="download">download</button>
+  </div>
+  <div id="imagearea">
+    <canvas id="image" width="1920px" height="1080px"></canvas>
+  </div>
+  <script>
+    document.getElementById('generate').addEventListener('click', event => {
+      let url = document.getElementById('amazonurl').value;
+      let dp = /dp\/([^?\/]+)/.exec(url);
+      if (dp.length < 2) return;
+
+      let imageurl = 'https://images.amazon.com/images/P/' + dp[1] + '.09_SL500_.jpg';
+      let ctx = document.getElementById('image').getContext('2d');
+      ctx.fillStyle = '#008080';
+      ctx.fillRect(0, 0, 1920, 1080);
+
+      let bookface = new Image();
+      bookface.crossOrigin = 'anonymous';
+      bookface.addEventListener('load', event => {
+        ctx.drawImage(bookface, 100, 100);
+      });
+      bookface.src = imageurl;
+    });
+
+    document.getElementById('download').addEventListener('click', event => {
+      let imageUrl = document.getElementById('image').toDataURL('image/png');
+      let downloadFilename = 'bookback.png';
+
+      let downloadLink = document.createElement('a');
+      downloadLink.href = imageUrl;
+      downloadLink.download = downloadFilename;
+      downloadLink.click();
+    });
+  </script>
+</body>
+</html>
+

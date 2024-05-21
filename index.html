@@ -7,12 +7,26 @@
 <body>
   <div id="inputarea">
     <div>
+      size:
+      width = <input type="number" name="sizewidth" id="sizewidth" value="1920" /> px,
+      height = <input type="number" name="sizeheight" id="sizeheight" value="1080" /> px
+    </div>
+    <div>
       background color:
       <input type="color" name="backgroundcolor" id="backgroundcolor" value="#008080" />
     </div>
-    <input type="text" name="amazonurl" id="amazonurl" placeholder="amazon url here" />
-    <button type="button" id="generate">generate</button>
-    <button type="button" id="download">download</button>
+    <div>
+      position:
+      x = <input type="number" name="positionx" id="positionx" value="100" /> px,
+      y = <input type="number" name="positiony" id="positiony" value="100" /> px
+    </div>
+    <div>
+      amazon url: <input type="text" name="amazonurl" id="amazonurl" placeholder="amazon url here" />
+    </div>
+    <div>
+      <button type="button" id="generate">generate</button>
+      <button type="button" id="download">download</button>
+    </div>
   </div>
   <div id="imagearea">
     <canvas id="image" width="1920px" height="1080px"></canvas>
@@ -26,16 +40,28 @@
         if ((gp == null) || (gp.length < 2)) return;
         dp = gp;
       }
-
       let imageurl = 'https://images.amazon.com/images/P/' + dp[1] + '.09_SL500_.jpg';
-      let ctx = document.getElementById('image').getContext('2d');
+
+      let size = {
+        width: document.getElementById('sizewidth').value,
+        height: document.getElementById('sizeheight').value
+      };
+      let position = {
+        x: document.getElementById('positionx').value,
+        y: document.getElementById('positiony').value
+      };
+
+      let canvas = document.getElementById('image');
+      canvas.width = size.width;
+      canvas.height = size.height;
+      let ctx = canvas.getContext('2d');
       ctx.fillStyle = document.getElementById('backgroundcolor').value;
-      ctx.fillRect(0, 0, 1920, 1080);
+      ctx.fillRect(0, 0, size.width, size.height);
 
       let bookface = new Image();
       bookface.crossOrigin = 'anonymous';
       bookface.addEventListener('load', event => {
-        ctx.drawImage(bookface, 100, 100);
+        ctx.drawImage(bookface, position.x, position.y);
       });
       bookface.src = imageurl;
     });
